@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sustainable Lunch Packaging Designer</title>
+  <style>
+    :root {
+      --leaf: #2f8f5b;
+      --leaf-dark: #17603a;
+      --sun: #ffc857;
+      --sky: #72c9f4;
+      --coral: #ff715b;
+      --ink: #24332d;
+      --muted: #65736c;
+      --paper: #fffdf3;
+      --panel: #ffffff;
+      --line: #d8e3dc;
+      --shadow: 0 12px 30px rgba(36, 51, 45, 0.14);
+      --radius: 8px;
+      --font: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 15%, rgba(255, 200, 87, 0.28), transparent 24rem),
+        radial-gradient(circle at 86% 20%, rgba(114, 201, 244, 0.24), transparent 22rem),
+        linear-gradient(135deg, #f6fff6 0%, #eef9ff 48%, #fff8e3 100%);
+    }
+
+    button, input, textarea, select { font: inherit; }
+
+    button {
+      cursor: pointer;
+      border: 0;
+      touch-action: manipulation;
+    }
+
+    .app {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.84);
+      border: 2px solid rgba(47, 143, 91, 0.16);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: 18px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.7rem, 4vw, 3.1rem);
+      line-height: 1.03;
+      color: var(--leaf-dark);
+      letter-spacing: 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: #e9f9ef;
+      border: 2px solid #bee8cb;
+      color: var(--leaf-dark);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .challenge {
+      margin: 14px 0 0;
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      line-height: 1.35;
+      font-weight: 800;
+      color: #36463f;
+    }
+
+    .progress-wrap {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 2px dashed #cbe2d4;
+    }
+
+    .progress-line {
+      height: 14px;
+      background: #e4efe9;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid #cde3d5;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 20%;
+      background: linear-gradient(90deg, var(--leaf), var(--sun), var(--coral));
+      border-radius: inherit;
+      transition: width 400ms ease;
+    }
+
+    .step-tabs {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .step-tab {
+      min-height: 48px;
+      padding: 8px;
+      border-radius: var(--radius);
+      background: #f5fbf7;
+      border: 2px solid #d9eee1;
+      color: var(--muted);
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+    }
+
+    .step-tab.active {
+      background: var(--leaf);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    main {
+      margin-top: 22px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid rgba(47, 143, 91, 0.14);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .step {
+      display: none;
+      padding: clamp(16px, 3vw, 30px);
+      animation: popIn 280ms ease both;
+    }
+
+    .step.active { display: block; }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      color: var(--leaf-dark);
+      font-size: clamp(1.55rem, 3vw, 2.4rem);
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      color: #2c4d3a;
+      font-size: 1.22rem;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .material-grid {
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    }
+
+    .choice-card {
+      min-height: 100%;
+      background: var(--panel);
+      border: 3px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      text-align: left;
+      box-shadow: 0 6px 18px rgba(36, 51, 45, 0.08);
+      transition: transform 180ms ease, border 180ms ease, box-shadow 180ms ease;
+    }
+
+    .choice-card:hover, .choice-card:focus-visible {
+      transform: translateY(-3px);
+      border-color: var(--sun);
+      outline: none;
+      box-shadow: 0 12px 24px rgba(36, 51, 45, 0.14);
+    }
+
+    .choice-card.selected {
+      border-color: var(--leaf);
+      background: #f2fff6;
+      box-shadow: 0 0 0 5px rgba(47, 143, 91, 0.14);
+    }
+
+    .material-art {
+      height: 110px;
+      border-radius: var(--radius);
+      border: 2px solid #e6efe9;
+      display: grid;
+      place-items: center;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      background-color: #f4ead5;
+    }
+
+    .material-art::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(45deg, transparent 44%, rgba(255,255,255,0.45) 46%, transparent 50%),
+        repeating-linear-gradient(90deg, rgba(79,58,34,0.08) 0 3px, transparent 3px 16px);
+      opacity: 0.95;
+    }
+
+    .material-art span {
+      position: relative;
+      font-size: 3rem;
+      filter: drop-shadow(0 5px 2px rgba(0,0,0,0.08));
+      animation: bob 2.8s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-6px) rotate(2deg); }
+    }
+
+    .stars {
+      color: #f7b733;
+      letter-spacing: 0;
+      font-size: 1.12rem;
+      white-space: nowrap;
+    }
+
+    .ratings {
+      display: grid;
+      gap: 6px;
+      margin-top: 10px;
+      color: #3f5149;
+      font-weight: 800;
+    }
+
+    .details-panel, .info-panel {
+      margin-top: 16px;
+      padding: 16px;
+      background: #f7fcf8;
+      border: 2px solid #cde8d7;
+      border-radius: var(--radius);
+    }
+
+    .two-cols {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 22px;
+      line-height: 1.55;
+      font-weight: 700;
+    }
+
+    .shape-layout, .decorate-layout, .size-layout {
+      display: grid;
+      grid-template-columns: minmax(270px, 0.92fr) minmax(300px, 1.08fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .shape-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .big-btn {
+      min-height: 58px;
+      border-radius: var(--radius);
+      padding: 12px;
+      background: #eef8ff;
+      border: 3px solid #c8e7fb;
+      color: #244b60;
+      font-weight: 900;
+      font-size: 1.02rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 160ms ease, background 160ms ease, border 160ms ease;
+    }
+
+    .big-btn:hover, .big-btn:focus-visible {
+      transform: translateY(-2px);
+      outline: none;
+      border-color: var(--sky);
+    }
+
+    .big-btn.selected {
+      background: #dff7e7;
+      border-color: var(--leaf);
+      color: var(--leaf-dark);
+    }
+
+    .viewer-card {
+      background: #f7fbff;
+      border: 2px solid #cce6f7;
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, #ecfaff 0%, #fffaf0 100%);
+      border: 2px solid #d7e9ee;
+      touch-action: none;
+    }
+
+    #shapeCanvas { height: 350px; }
+    #packageCanvas { height: 270px; }
+    #drawCanvas {
+      height: 350px;
+      background: #ffffff;
+      cursor: crosshair;
+    }
+
+    .viewer-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .control-chip {
+      min-height: 46px;
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      background: #fff;
+      border: 2px solid #d7e9ee;
+      font-weight: 900;
+      color: #33515d;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .stat {
+      padding: 12px;
+      border-radius: var(--radius);
+      background: white;
+      border: 2px solid #e0ece5;
+      font-weight: 900;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.55rem;
+      color: var(--leaf-dark);
+    }
+
+    .snack-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .slider-row {
+      display: grid;
+      grid-template-columns: 90px minmax(120px, 1fr) 76px;
+      gap: 12px;
+      align-items: center;
+      margin: 14px 0;
+      font-weight: 900;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--leaf);
+      min-height: 44px;
+    }
+
+    .feedback {
+      margin-top: 14px;
+      border-radius: var(--radius);
+      padding: 14px;
+      border: 3px solid #cfe8d8;
+      background: #f3fff6;
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--leaf-dark);
+    }
+
+    .meter {
+      height: 24px;
+      border-radius: 999px;
+      background: #e9efeb;
+      overflow: hidden;
+      border: 2px solid #d5e3da;
+    }
+
+    .meter span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--coral), var(--sun), var(--leaf));
+      transition: width 260ms ease;
+    }
+
+    .palette, .patterns, .stickers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 8px 0 16px;
+    }
+
+    .swatch, .pattern-btn, .sticker-btn, .icon-btn {
+      min-width: 50px;
+      min-height: 50px;
+      border-radius: var(--radius);
+      border: 3px solid #d8e7dc;
+      background: white;
+      font-weight: 900;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+    }
+
+    .swatch.selected, .pattern-btn.selected, .sticker-btn.selected {
+      border-color: var(--leaf);
+      box-shadow: 0 0 0 4px rgba(47, 143, 91, 0.14);
+    }
+
+    .pattern-preview {
+      width: 40px;
+      height: 36px;
+      border-radius: 6px;
+      border: 1px solid #cad8cf;
+    }
+
+    .name-input {
+      width: 100%;
+      min-height: 56px;
+      border: 3px solid #cfe1d6;
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .canvas-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .reflection {
+      width: 100%;
+      min-height: 130px;
+      border-radius: var(--radius);
+      border: 3px solid #cfe1d6;
+      padding: 12px;
+      font-size: 1.1rem;
+      line-height: 1.45;
+      resize: vertical;
+    }
+
+    .summary-box {
+      padding: 16px;
+      background: #fff9e8;
+      border: 2px solid #f2d892;
+      border-radius: var(--radius);
+      font-size: 1.1rem;
+      line-height: 1.55;
+      font-weight: 800;
+    }
+
+    .score-card {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: center;
+      background: #f4fff7;
+      border: 3px solid #bee8cb;
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .score-circle {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: conic-gradient(var(--leaf) 0deg, var(--leaf) var(--score-deg), #e4efe9 var(--score-deg), #e4efe9 360deg);
+      border: 5px solid white;
+      box-shadow: 0 6px 20px rgba(36, 51, 45, 0.16);
+      position: relative;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--leaf-dark);
+    }
+
+    .score-circle::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border-radius: 50%;
+      background: white;
+    }
+
+    .score-circle span {
+      position: relative;
+    }
+
+    .export-page {
+      margin-top: 18px;
+      padding: 18px;
+      background: white;
+      border: 3px solid #dbe9e0;
+      border-radius: var(--radius);
+    }
+
+    .export-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.95fr) minmax(280px, 1.05fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .facts {
+      display: grid;
+      gap: 9px;
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .fact {
+      padding: 10px;
+      background: #f7fbf8;
+      border: 2px solid #ddebe2;
+      border-radius: var(--radius);
+    }
+
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 16px clamp(16px, 3vw, 30px);
+      border-top: 2px solid #e1ede6;
+      background: #fbfffc;
+    }
+
+    .nav-btn, .print-btn {
+      min-height: 58px;
+      min-width: 150px;
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      color: white;
+      background: var(--leaf);
+      font-size: 1.08rem;
+      font-weight: 900;
+      box-shadow: 0 8px 16px rgba(47, 143, 91, 0.22);
+      transition: transform 160ms ease, filter 160ms ease;
+    }
+
+    .nav-btn:hover, .print-btn:hover, .nav-btn:focus-visible, .print-btn:focus-visible {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+      outline: none;
+    }
+
+    .secondary {
+      background: #51635a;
+      box-shadow: 0 8px 16px rgba(81, 99, 90, 0.18);
+    }
+
+    .print-btn {
+      background: var(--coral);
+      min-width: 170px;
+    }
+
+    details.teacher {
+      margin: 22px 0 8px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #d7e8de;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    details.teacher summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px 18px;
+      font-size: 1.22rem;
+      font-weight: 900;
+      color: var(--leaf-dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    details.teacher summary::-webkit-details-marker { display: none; }
+
+    .teacher-body {
+      padding: 0 18px 18px;
+      border-top: 2px solid #e0eee5;
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 12px 0 18px;
+    }
+
+    .pill {
+      padding: 10px 12px;
+      background: #eef8ff;
+      border: 2px solid #c9e7f8;
+      border-radius: 999px;
+      font-weight: 900;
+      color: #264b5d;
+    }
+
+    .hidden-print { display: inline-flex; }
+
+    @media (max-width: 820px) {
+      .app { padding: 12px; }
+      header { position: static; }
+      .step-tabs { grid-template-columns: repeat(5, minmax(54px, 1fr)); }
+      .step-tab { font-size: 0.92rem; min-height: 44px; }
+      .shape-layout, .decorate-layout, .size-layout, .two-cols, .export-grid, .score-card {
+        grid-template-columns: 1fr;
+      }
+      .shape-buttons { grid-template-columns: 1fr; }
+      .slider-row { grid-template-columns: 78px 1fr 64px; gap: 8px; }
+      #shapeCanvas, #drawCanvas { height: 300px; }
+      .nav-btn, .print-btn { width: 100%; }
+      .nav-row { flex-direction: column-reverse; }
+    }
+
+    @media print {
+      body { background: white; }
+      header, .step:not(#step5), .nav-row, .teacher, .hidden-print, .progress-wrap { display: none !important; }
+      .app { max-width: none; padding: 0; }
+      main { box-shadow: none; border: 0; }
+      #step5 { display: block !important; padding: 0; }
+      .summary-box, .score-card, .export-page { break-inside: avoid; }
+      textarea { border: 1px solid #999; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="topline">
+        <h1>Sustainable Lunch Packaging Designer</h1>
+        <div class="badge" aria-label="Design and Technologies challenge">🌱 Design Challenge</div>
+      </div>
+      <p class="challenge">Your challenge is to design sustainable packaging for a lunch snack that protects food, reduces waste and is environmentally friendly.</p>
+      <div class="progress-wrap" aria-label="Design progress">
+        <div class="progress-line"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="step-tabs" id="stepTabs"></div>
+      </div>
+    </header>
+
+    <main>
+      <section class="step active" id="step1">
+        <h2>Choose Your Packaging Material</h2>
+        <p class="lead">Pick one material. Look at the stars to compare how sustainable, strong and water resistant it is.</p>
+        <div class="grid material-grid" id="materialGrid"></div>
+        <div class="details-panel" id="materialDetails" aria-live="polite"></div>
+      </section>
+
+      <section class="step" id="step2">
+        <h2>Choose Your Packaging Shape</h2>
+        <p class="lead">Spin the shape, zoom in and investigate how it could protect a lunch snack.</p>
+        <div class="shape-layout">
+          <div>
+            <div class="shape-buttons" id="shapeButtons"></div>
+            <div class="details-panel" id="shapeDetails"></div>
+          </div>
+          <div class="viewer-card">
+            <canvas id="shapeCanvas" aria-label="Interactive 3D shape viewer"></canvas>
+            <div class="viewer-controls">
+              <button class="control-chip" id="rotLeft" title="Rotate left">↶ Rotate</button>
+              <button class="control-chip" id="rotRight" title="Rotate right">↷ Rotate</button>
+              <button class="control-chip" id="zoomIn" title="Zoom in">＋ Zoom</button>
+              <button class="control-chip" id="zoomOut" title="Zoom out">－ Zoom</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="step" id="step3">
+        <h2>Adjust Your Dimensions</h2>
+        <p class="lead">Choose a snack, then make your package just a little bigger so it fits without wasting space.</p>
+        <div class="size-layout">
+          <div>
+            <h3>Choose a snack</h3>
+            <div class="snack-buttons" id="snackButtons"></div>
+            <div class="info-panel">
+              <h3 id="snackTitle">Muesli Bar</h3>
+              <div id="snackDims"></div>
+              <p><strong>Teacher guidance:</strong> Try making your package about 2-5 mm larger than the snack so it fits comfortably but does not waste space.</p>
+            </div>
+            <div class="slider-row">
+              <label for="lengthRange">Length</label>
+              <input id="lengthRange" type="range" min="20" max="180" value="95">
+              <span id="lengthValue">95 mm</span>
+            </div>
+            <div class="slider-row">
+              <label for="widthRange">Width</label>
+              <input id="widthRange" type="range" min="20" max="160" value="40">
+              <span id="widthValue">40 mm</span>
+            </div>
+            <div class="slider-row">
+              <label for="heightRange">Height</label>
+              <input id="heightRange" type="range" min="10" max="120" value="20">
+              <span id="heightValue">20 mm</span>
+            </div>
+          </div>
+          <div class="viewer-card">
+            <canvas id="packageCanvas" aria-label="Package size preview"></canvas>
+            <div class="feedback" id="fitFeedback">Fits Well</div>
+            <div class="stats-grid">
+              <div class="stat"><strong id="efficiencyValue">64%</strong> Space Efficiency</div>
+              <div class="stat"><strong id="wasteValue">36%</strong> Waste Space</div>
+            </div>
+            <div class="meter" aria-label="Space efficiency meter"><span id="efficiencyMeter"></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="step" id="step4">
+        <h2>Create Your Packaging Design</h2>
+        <p class="lead">Choose colours and patterns, draw your idea, add stickers, and name your sustainable package.</p>
+        <div class="decorate-layout">
+          <div>
+            <h3>Packaging Name</h3>
+            <input class="name-input" id="packageName" type="text" maxlength="32" value="Green Snack Box" aria-label="Packaging name">
+            <h3>Choose colour</h3>
+            <div class="palette" id="palette"></div>
+            <h3>Choose pattern</h3>
+            <div class="patterns" id="patterns"></div>
+            <h3>Add stickers</h3>
+            <div class="stickers" id="stickers"></div>
+          </div>
+          <div class="viewer-card">
+            <canvas id="drawCanvas" aria-label="Drawing canvas"></canvas>
+            <div class="canvas-toolbar">
+              <button class="control-chip" id="clearDrawing">Clear Drawing</button>
+              <button class="control-chip" id="eraser">Eraser</button>
+              <button class="control-chip" id="pen">Pen</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="step" id="step5">
+        <h2>Explain Your Design</h2>
+        <p class="lead">Use your designer thinking to explain your choices. Your summary updates as you work.</p>
+        <div class="summary-box" id="autoSummary"></div>
+        <div class="two-cols" style="margin-top:16px;">
+          <div>
+            <h3>My design is sustainable because:</h3>
+            <textarea class="reflection" id="sustainableBecause" placeholder="Type your thinking here..."></textarea>
+          </div>
+          <div>
+            <h3>One thing I would improve:</h3>
+            <textarea class="reflection" id="improvement" placeholder="Type your idea here..."></textarea>
+          </div>
+        </div>
+        <div class="score-card">
+          <div class="score-circle" id="scoreCircle" style="--score-deg:0deg;"><span id="scoreNumber">0</span></div>
+          <div>
+            <h3 id="scoreTitle">Sustainability Score</h3>
+            <p class="lead" id="scoreMessage" style="margin-bottom:0;"></p>
+          </div>
+        </div>
+        <div class="export-page" id="finalDesign">
+          <h2>Final Design Page</h2>
+          <div class="export-grid">
+            <canvas id="finalCanvas" aria-label="Final packaging image"></canvas>
+            <div class="facts" id="finalFacts"></div>
+          </div>
+          <div class="canvas-toolbar hidden-print">
+            <button class="print-btn" id="printDesign">🖨 Print Design</button>
+            <button class="print-btn" id="downloadPdf">⬇ Download PDF</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="nav-row">
+        <button class="nav-btn secondary" id="prevBtn">← Back</button>
+        <button class="nav-btn" id="nextBtn">Next Step →</button>
+      </div>
+    </main>
+
+    <details class="teacher">
+      <summary>Teacher Dashboard <span>⌄</span></summary>
+      <div class="teacher-body">
+        <h3>Curriculum Links</h3>
+        <div class="pill-list">
+          <span class="pill">AC9TDE4K01</span>
+          <span class="pill">AC9TDE4P01</span>
+          <span class="pill">AC9TDE4P02</span>
+          <span class="pill">AC9TDE4P03</span>
+          <span class="pill">AC9TDE4P05</span>
+        </div>
+        <h3>Learning Evidence</h3>
+        <ul>
+          <li>Material selection</li>
+          <li>Shape investigation</li>
+          <li>Measurement application</li>
+          <li>Design communication</li>
+          <li>Evaluation</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+
+  <script>
+    const materials = [
+      { name: "Recycled Cardboard", icon: "♻", color: "#d9b77e", sustainability: 5, strength: 4, water: 1, advantages: ["Recyclable", "Lightweight", "Easy to print on"], disadvantages: ["Not waterproof"], score: 28 },
+      { name: "Kraft Paper", icon: "▰", color: "#c99a5a", sustainability: 4, strength: 2, water: 1, advantages: ["Compostable", "Uses simple paper fibres", "Easy to fold"], disadvantages: ["Can tear if wet"], score: 22 },
+      { name: "Recycled Paperboard", icon: "▣", color: "#b9c0a8", sustainability: 5, strength: 4, water: 2, advantages: ["Uses recycled fibres", "Good for boxes", "Printable"], disadvantages: ["Needs coating for wet food"], score: 27 },
+      { name: "Bamboo Fibre", icon: "☘", color: "#a8d579", sustainability: 5, strength: 3, water: 3, advantages: ["Fast-growing plant source", "Compostable", "Light but firm"], disadvantages: ["May cost more"], score: 29 },
+      { name: "Compostable Bioplastic", icon: "◌", color: "#c9f0b9", sustainability: 3, strength: 3, water: 5, advantages: ["Good water resistance", "Can be clear", "Compostable in the right place"], disadvantages: ["Needs special composting"], score: 20 },
+      { name: "Sugarcane Bagasse", icon: "☼", color: "#efe2ad", sustainability: 5, strength: 3, water: 3, advantages: ["Made from leftover sugarcane", "Compostable", "Good for trays"], disadvantages: ["Can soften with very wet food"], score: 30 },
+      { name: "Mushroom Packaging", icon: "◇", color: "#e2d2bb", sustainability: 5, strength: 4, water: 2, advantages: ["Grown from natural fibres", "Compostable", "Protects well"], disadvantages: ["Bulkier than paper"], score: 31 }
+    ];
+
+    const shapes = [
+      { name: "Cube", icon: "◼", faces: 6, edges: 12, vertices: 8, protection: 4, stackability: 5, efficiency: 3, score: 18 },
+      { name: "Rectangular Prism", icon: "▭", faces: 6, edges: 12, vertices: 8, protection: 5, stackability: 5, efficiency: 5, score: 25 },
+      { name: "Cylinder", icon: "◯", faces: 3, edges: 2, vertices: 0, protection: 4, stackability: 3, efficiency: 3, score: 16 },
+      { name: "Cone", icon: "△", faces: 2, edges: 1, vertices: 1, protection: 2, stackability: 1, efficiency: 2, score: 8 },
+      { name: "Triangular Prism", icon: "▱", faces: 5, edges: 9, vertices: 6, protection: 3, stackability: 3, efficiency: 4, score: 15 },
+      { name: "Hexagonal Prism", icon: "⬡", faces: 8, edges: 18, vertices: 12, protection: 4, stackability: 3, efficiency: 3, score: 16 },
+      { name: "Pyramid", icon: "△", faces: 5, edges: 8, vertices: 5, protection: 2, stackability: 1, efficiency: 2, score: 7 }
+    ];
+
+    const snacks = [
+      { name: "Muesli Bar", icon: "▭", l: 90, w: 35, h: 15 },
+      { name: "Crackers", icon: "□", l: 75, w: 75, h: 22 },
+      { name: "Popcorn", icon: "◌", l: 85, w: 60, h: 70 },
+      { name: "Apple Slices", icon: "◒", l: 95, w: 70, h: 45 },
+      { name: "Sandwich", icon: "△", l: 120, w: 110, h: 45 }
+    ];
+
+    const patterns = [
+      { name: "Nature leaves", key: "leaves" },
+      { name: "Recycle symbols", key: "recycle" },
+      { name: "Dots", key: "dots" },
+      { name: "Stripes", key: "stripes" },
+      { name: "Waves", key: "waves" }
+    ];
+
+    const colours = ["#69c779", "#ffc857", "#72c9f4", "#ff9f7c", "#d8a7ff", "#f5f0d3"];
+    const stickerList = ["♻", "🌱", "☀", "✓", "💧", "♥"];
+    const state = {
+      step: 1,
+      material: materials[0],
+      shape: shapes[1],
+      snack: snacks[0],
+      length: 95,
+      width: 40,
+      height: 20,
+      colour: colours[0],
+      pattern: patterns[0],
+      sticker: stickerList[0],
+      penMode: "pen",
+      shapeRotation: 0.45,
+      shapeZoom: 1
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function stars(n) {
+      return '<span class="stars" aria-label="' + n + ' out of 5 stars">' + "★★★★★".slice(0, n) + '<span style="color:#cfd9d3">' + "★★★★★".slice(n) + "</span></span>";
+    }
+
+    function init() {
+      buildTabs();
+      buildMaterials();
+      buildShapes();
+      buildSnacks();
+      buildDecorControls();
+      setupCanvases();
+      wireEvents();
+      selectMaterial(0);
+      selectShape(1);
+      selectSnack(0);
+      updateDecorSelection();
+      updateStep();
+      updateAll();
+    }
+
+    function buildTabs() {
+      $("stepTabs").innerHTML = [1,2,3,4,5].map(n => '<button class="step-tab" data-step="' + n + '">Step ' + n + '</button>').join("");
+      document.querySelectorAll(".step-tab").forEach(btn => btn.addEventListener("click", () => goStep(Number(btn.dataset.step))));
+    }
+
+    function buildMaterials() {
+      $("materialGrid").innerHTML = materials.map((m, i) => `
+        <button class="choice-card" data-material="${i}" aria-label="Choose ${m.name}">
+          <div class="material-art" style="background-color:${m.color}"><span>${m.icon}</span></div>
+          <h3>${m.name}</h3>
+          <div class="ratings">
+            <div>Sustainability ${stars(m.sustainability)}</div>
+            <div>Strength ${stars(m.strength)}</div>
+            <div>Water resistance ${stars(m.water)}</div>
+          </div>
+        </button>`).join("");
+      document.querySelectorAll("[data-material]").forEach(btn => btn.addEventListener("click", () => selectMaterial(Number(btn.dataset.material))));
+    }
+
+    function selectMaterial(index) {
+      state.material = materials[index];
+      document.querySelectorAll("[data-material]").forEach((btn, i) => btn.classList.toggle("selected", i === index));
+      $("materialDetails").innerHTML = `
+        <h3>${state.material.name}</h3>
+        <div class="two-cols">
+          <div><strong>Advantages</strong><ul>${state.material.advantages.map(a => `<li>${a}</li>`).join("")}</ul></div>
+          <div><strong>Disadvantages</strong><ul>${state.material.disadvantages.map(d => `<li>${d}</li>`).join("")}</ul></div>
+        </div>`;
+      updateAll();
+    }
+
+    function buildShapes() {
+      $("shapeButtons").innerHTML = shapes.map((s, i) => `<button class="big-btn" data-shape="${i}"><span>${s.icon}</span> ${s.name}</button>`).join("");
+      document.querySelectorAll("[data-shape]").forEach(btn => btn.addEventListener("click", () => selectShape(Number(btn.dataset.shape))));
+    }
+
+    function selectShape(index) {
+      state.shape = shapes[index];
+      document.querySelectorAll("[data-shape]").forEach((btn, i) => btn.classList.toggle("selected", i === index));
+      $("shapeDetails").innerHTML = `
+        <div class="stats-grid">
+          <div class="stat"><strong>${state.shape.faces}</strong> Faces</div>
+          <div class="stat"><strong>${state.shape.edges}</strong> Edges</div>
+          <div class="stat"><strong>${state.shape.vertices}</strong> Vertices</div>
+        </div>
+        <h3 style="margin-top:14px;">Packaging performance</h3>
+        <div class="ratings">
+          <div>Protection ${stars(state.shape.protection)}</div>
+          <div>Stackability ${stars(state.shape.stackability)}</div>
+          <div>Material efficiency ${stars(state.shape.efficiency)}</div>
+        </div>`;
+      drawShape();
+      updateAll();
+    }
+
+    function buildSnacks() {
+      $("snackButtons").innerHTML = snacks.map((s, i) => `<button class="big-btn" data-snack="${i}"><span>${s.icon}</span> ${s.name}</button>`).join("");
+      document.querySelectorAll("[data-snack]").forEach(btn => btn.addEventListener("click", () => selectSnack(Number(btn.dataset.snack))));
+    }
+
+    function selectSnack(index) {
+      state.snack = snacks[index];
+      state.length = state.snack.l + 5;
+      state.width = state.snack.w + 5;
+      state.height = state.snack.h + 5;
+      document.querySelectorAll("[data-snack]").forEach((btn, i) => btn.classList.toggle("selected", i === index));
+      ["length", "width", "height"].forEach(k => $(k + "Range").value = state[k]);
+      $("snackTitle").textContent = state.snack.name;
+      $("snackDims").innerHTML = `<p><strong>Length:</strong> ${state.snack.l} mm<br><strong>Width:</strong> ${state.snack.w} mm<br><strong>Height:</strong> ${state.snack.h} mm</p>`;
+      updateAll();
+    }
+
+    function buildDecorControls() {
+      $("palette").innerHTML = colours.map(c => `<button class="swatch" data-colour="${c}" style="background:${c}" aria-label="Choose colour ${c}"></button>`).join("");
+      $("patterns").innerHTML = patterns.map(p => `<button class="pattern-btn" data-pattern="${p.key}" title="${p.name}"><span class="pattern-preview" data-preview="${p.key}"></span></button>`).join("");
+      $("stickers").innerHTML = stickerList.map(s => `<button class="sticker-btn" data-sticker="${s}" aria-label="Add sticker ${s}">${s}</button>`).join("");
+      document.querySelectorAll("[data-colour]").forEach(btn => btn.addEventListener("click", () => { state.colour = btn.dataset.colour; updateDecorSelection(); drawDesignBase(); updateAll(); }));
+      document.querySelectorAll("[data-pattern]").forEach(btn => btn.addEventListener("click", () => { state.pattern = patterns.find(p => p.key === btn.dataset.pattern); updateDecorSelection(); drawDesignBase(); updateAll(); }));
+      document.querySelectorAll("[data-sticker]").forEach(btn => btn.addEventListener("click", () => { state.sticker = btn.dataset.sticker; updateDecorSelection(); addSticker(); updateAll(); }));
+      document.querySelectorAll("[data-preview]").forEach(el => paintPatternPreview(el, el.dataset.preview));
+    }
+
+    function updateDecorSelection() {
+      document.querySelectorAll("[data-colour]").forEach(btn => btn.classList.toggle("selected", btn.dataset.colour === state.colour));
+      document.querySelectorAll("[data-pattern]").forEach(btn => btn.classList.toggle("selected", btn.dataset.pattern === state.pattern.key));
+      document.querySelectorAll("[data-sticker]").forEach(btn => btn.classList.toggle("selected", btn.dataset.sticker === state.sticker));
+    }
+
+    let drawCtx, isDrawing = false, lastPoint = null;
+
+    function setupCanvases() {
+      ["shapeCanvas", "packageCanvas", "drawCanvas", "finalCanvas"].forEach(id => resizeCanvas($(id)));
+      drawCtx = $("drawCanvas").getContext("2d");
+      drawDesignBase();
+      window.addEventListener("resize", () => {
+        ["shapeCanvas", "packageCanvas", "finalCanvas"].forEach(id => resizeCanvas($(id)));
+        drawShape();
+        drawPackage();
+        drawFinal();
+      });
+    }
+
+    function resizeCanvas(canvas) {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.max(300, Math.floor(rect.width * devicePixelRatio));
+      canvas.height = Math.max(220, Math.floor(rect.height * devicePixelRatio));
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    }
+
+    function wireEvents() {
+      $("nextBtn").addEventListener("click", () => goStep(Math.min(5, state.step + 1)));
+      $("prevBtn").addEventListener("click", () => goStep(Math.max(1, state.step - 1)));
+      ["length", "width", "height"].forEach(k => {
+        $(k + "Range").addEventListener("input", e => {
+          state[k] = Number(e.target.value);
+          updateAll();
+        });
+      });
+      $("rotLeft").addEventListener("click", () => { state.shapeRotation -= 0.25; drawShape(); });
+      $("rotRight").addEventListener("click", () => { state.shapeRotation += 0.25; drawShape(); });
+      $("zoomIn").addEventListener("click", () => { state.shapeZoom = Math.min(1.6, state.shapeZoom + 0.12); drawShape(); });
+      $("zoomOut").addEventListener("click", () => { state.shapeZoom = Math.max(0.65, state.shapeZoom - 0.12); drawShape(); });
+      $("shapeCanvas").addEventListener("pointerdown", startShapeDrag);
+      $("drawCanvas").addEventListener("pointerdown", startDraw);
+      $("drawCanvas").addEventListener("pointermove", moveDraw);
+      window.addEventListener("pointerup", () => { isDrawing = false; lastPoint = null; });
+      $("clearDrawing").addEventListener("click", drawDesignBase);
+      $("eraser").addEventListener("click", () => state.penMode = "eraser");
+      $("pen").addEventListener("click", () => state.penMode = "pen");
+      $("packageName").addEventListener("input", () => {
+        drawDesignBase();
+        updateAll();
+      });
+      $("sustainableBecause").addEventListener("input", updateAll);
+      $("improvement").addEventListener("input", updateAll);
+      $("printDesign").addEventListener("click", () => window.print());
+      $("downloadPdf").addEventListener("click", () => {
+        alert("Choose 'Save as PDF' in the print window to download your design.");
+        window.print();
+      });
+    }
+
+    function startShapeDrag(e) {
+      const canvas = $("shapeCanvas");
+      let startX = e.clientX;
+      canvas.setPointerCapture(e.pointerId);
+      const move = (ev) => {
+        state.shapeRotation += (ev.clientX - startX) / 180;
+        startX = ev.clientX;
+        drawShape();
+      };
+      const end = () => {
+        canvas.removeEventListener("pointermove", move);
+        canvas.removeEventListener("pointerup", end);
+      };
+      canvas.addEventListener("pointermove", move);
+      canvas.addEventListener("pointerup", end);
+    }
+
+    function goStep(step) {
+      state.step = step;
+      updateStep();
+      updateAll();
+      document.querySelector("main").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function updateStep() {
+      document.querySelectorAll(".step").forEach((el, i) => el.classList.toggle("active", i + 1 === state.step));
+      document.querySelectorAll(".step-tab").forEach((el, i) => el.classList.toggle("active", i + 1 === state.step));
+      $("progressFill").style.width = (state.step / 5 * 100) + "%";
+      $("prevBtn").style.visibility = state.step === 1 ? "hidden" : "visible";
+      $("nextBtn").textContent = state.step === 5 ? "Review Design ✓" : "Next Step →";
+    }
+
+    function updateAll() {
+      $("lengthValue").textContent = state.length + " mm";
+      $("widthValue").textContent = state.width + " mm";
+      $("heightValue").textContent = state.height + " mm";
+      drawShape();
+      drawPackage();
+      drawFinal();
+      updateFit();
+      updateSummary();
+    }
+
+    function project(x, y, z, scale, cx, cy) {
+      const r = state.shapeRotation;
+      const xr = x * Math.cos(r) - z * Math.sin(r);
+      const zr = x * Math.sin(r) + z * Math.cos(r);
+      return { x: cx + (xr - y * 0.38) * scale, y: cy + (zr * 0.24 + y * 0.9) * scale };
+    }
+
+    function drawShape() {
+      const canvas = $("shapeCanvas");
+      const ctx = canvas.getContext("2d");
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      drawGrid(ctx, w, h);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "#24684a";
+      ctx.fillStyle = "rgba(105,199,121,0.42)";
+      const scale = 78 * state.shapeZoom;
+      const cx = w / 2;
+      const cy = h / 2 - 12;
+      const name = state.shape.name;
+      if (name === "Cube" || name === "Rectangular Prism") drawBox(ctx, cx, cy, scale, name === "Cube" ? 1 : 1.45, 0.85, 1);
+      if (name === "Cylinder") drawCylinder(ctx, cx, cy, scale);
+      if (name === "Cone") drawCone(ctx, cx, cy, scale);
+      if (name === "Triangular Prism") drawTriPrism(ctx, cx, cy, scale);
+      if (name === "Hexagonal Prism") drawHexPrism(ctx, cx, cy, scale);
+      if (name === "Pyramid") drawPyramid(ctx, cx, cy, scale);
+      ctx.fillStyle = "#24332d";
+      ctx.font = "900 22px " + getComputedStyle(document.body).fontFamily;
+      ctx.textAlign = "center";
+      ctx.fillText(name, cx, h - 24);
+    }
+
+    function drawGrid(ctx, w, h) {
+      ctx.fillStyle = "#f7fcff";
+      ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = "rgba(114,201,244,0.28)";
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 28) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+      for (let y = 0; y < h; y += 28) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+    }
+
+    function drawBox(ctx, cx, cy, scale, sx, sy, sz) {
+      const p = [
+        project(-sx, -sy, -sz, scale, cx, cy), project(sx, -sy, -sz, scale, cx, cy), project(sx, sy, -sz, scale, cx, cy), project(-sx, sy, -sz, scale, cx, cy),
+        project(-sx, -sy, sz, scale, cx, cy), project(sx, -sy, sz, scale, cx, cy), project(sx, sy, sz, scale, cx, cy), project(-sx, sy, sz, scale, cx, cy)
+      ];
+      [[0,1,2,3], [4,5,6,7], [0,1,5,4], [1,2,6,5], [2,3,7,6], [3,0,4,7]].forEach((face, i) => polygon(ctx, face.map(j => p[j]), i));
+    }
+
+    function polygon(ctx, pts, i) {
+      ctx.beginPath();
+      pts.forEach((p, n) => n ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+      ctx.closePath();
+      ctx.fillStyle = ["rgba(105,199,121,0.46)", "rgba(255,200,87,0.42)", "rgba(114,201,244,0.42)", "rgba(255,159,124,0.34)"][i % 4];
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    function drawCylinder(ctx, cx, cy, scale) {
+      const rx = 80 * state.shapeZoom, ry = 26 * state.shapeZoom, height = 145 * state.shapeZoom;
+      ctx.fillStyle = "rgba(105,199,121,0.38)";
+      ctx.beginPath(); ctx.ellipse(cx, cy - height/2, rx, ry, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx - rx, cy - height/2); ctx.lineTo(cx - rx, cy + height/2); ctx.moveTo(cx + rx, cy - height/2); ctx.lineTo(cx + rx, cy + height/2); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(cx, cy + height/2, rx, ry, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    }
+
+    function drawCone(ctx, cx, cy, scale) {
+      const rx = 82 * state.shapeZoom, ry = 28 * state.shapeZoom, top = cy - 100 * state.shapeZoom, bottom = cy + 82 * state.shapeZoom;
+      polygon(ctx, [{x:cx, y:top}, {x:cx-rx, y:bottom}, {x:cx+rx, y:bottom}], 0);
+      ctx.beginPath(); ctx.ellipse(cx, bottom, rx, ry, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    }
+
+    function drawTriPrism(ctx, cx, cy, scale) {
+      const a = [project(-1, .8, -1, scale, cx, cy), project(1, .8, -1, scale, cx, cy), project(0, -1, -1, scale, cx, cy)];
+      const b = [project(-1, .8, 1, scale, cx, cy), project(1, .8, 1, scale, cx, cy), project(0, -1, 1, scale, cx, cy)];
+      polygon(ctx, a, 0); polygon(ctx, b, 1);
+      polygon(ctx, [a[0], a[1], b[1], b[0]], 2); polygon(ctx, [a[1], a[2], b[2], b[1]], 3); polygon(ctx, [a[2], a[0], b[0], b[2]], 0);
+    }
+
+    function drawHexPrism(ctx, cx, cy, scale) {
+      const front = [], back = [];
+      for (let i = 0; i < 6; i++) {
+        const ang = Math.PI / 6 + i * Math.PI / 3;
+        front.push(project(Math.cos(ang), Math.sin(ang), -0.9, scale, cx, cy));
+        back.push(project(Math.cos(ang), Math.sin(ang), 0.9, scale, cx, cy));
+      }
+      polygon(ctx, front, 0); polygon(ctx, back, 1);
+      for (let i = 0; i < 6; i++) polygon(ctx, [front[i], front[(i+1)%6], back[(i+1)%6], back[i]], i + 2);
+    }
+
+    function drawPyramid(ctx, cx, cy, scale) {
+      const base = [project(-1, .8, -1, scale, cx, cy), project(1, .8, -1, scale, cx, cy), project(1, .8, 1, scale, cx, cy), project(-1, .8, 1, scale, cx, cy)];
+      const top = project(0, -1.25, 0, scale, cx, cy);
+      polygon(ctx, base, 0);
+      for (let i = 0; i < 4; i++) polygon(ctx, [base[i], base[(i+1)%4], top], i + 1);
+    }
+
+    function updateFit() {
+      const snackVol = state.snack.l * state.snack.w * state.snack.h;
+      const packVol = state.length * state.width * state.height;
+      const fits = state.length >= state.snack.l && state.width >= state.snack.w && state.height >= state.snack.h;
+      const efficiency = fits ? Math.min(100, Math.round(snackVol / packVol * 100)) : Math.max(0, Math.round(packVol / snackVol * 40));
+      const waste = Math.max(0, 100 - efficiency);
+      let msg = "Fits Well";
+      let colour = "#17603a";
+      if (!fits) { msg = "Too Small"; colour = "#b53d2e"; }
+      else if (waste > 55) { msg = "Too Much Empty Space"; colour = "#9a6b00"; }
+      $("fitFeedback").textContent = msg + (fits ? " - nice measuring!" : " - make it a little bigger.");
+      $("fitFeedback").style.color = colour;
+      $("efficiencyValue").textContent = efficiency + "%";
+      $("wasteValue").textContent = waste + "%";
+      $("efficiencyMeter").style.width = efficiency + "%";
+      return { fits, efficiency, waste };
+    }
+
+    function drawPackage() {
+      const canvas = $("packageCanvas");
+      const ctx = canvas.getContext("2d");
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      drawGrid(ctx, w, h);
+      const maxDim = Math.max(state.length, state.width, state.height);
+      const scale = Math.min(w * 0.42 / maxDim, h * 0.42 / maxDim);
+      const cx = w / 2, cy = h / 2 + 16;
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "#24684a";
+      drawBox(ctx, cx, cy, scale * 55, state.length / maxDim, state.height / maxDim, state.width / maxDim);
+      ctx.fillStyle = "#24332d";
+      ctx.font = "900 16px " + getComputedStyle(document.body).fontFamily;
+      ctx.textAlign = "center";
+      ctx.fillText(`${state.length} x ${state.width} x ${state.height} mm`, cx, h - 16);
+    }
+
+    function drawDesignBase() {
+      const canvas = $("drawCanvas");
+      resizeCanvas(canvas);
+      const ctx = canvas.getContext("2d");
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = state.colour;
+      roundRect(ctx, 28, 28, w - 56, h - 56, 8);
+      ctx.fill();
+      ctx.strokeStyle = "#244535";
+      ctx.lineWidth = 4;
+      ctx.stroke();
+      drawPattern(ctx, 28, 28, w - 56, h - 56, state.pattern.key);
+      ctx.fillStyle = "#24332d";
+      ctx.textAlign = "center";
+      ctx.font = "900 24px " + getComputedStyle(document.body).fontFamily;
+      ctx.fillText($("packageName").value || "My Snack Pack", w / 2, 72);
+    }
+
+    function drawPattern(ctx, x, y, w, h, key) {
+      ctx.save();
+      ctx.beginPath(); roundRect(ctx, x, y, w, h, 8); ctx.clip();
+      ctx.strokeStyle = "rgba(36,51,45,0.28)";
+      ctx.fillStyle = "rgba(255,255,255,0.48)";
+      if (key === "dots") {
+        for (let yy = y + 38; yy < y + h; yy += 36) for (let xx = x + 28; xx < x + w; xx += 36) { ctx.beginPath(); ctx.arc(xx, yy, 6, 0, Math.PI * 2); ctx.fill(); }
+      } else if (key === "stripes") {
+        ctx.lineWidth = 7;
+        for (let xx = x - h; xx < x + w; xx += 34) { ctx.beginPath(); ctx.moveTo(xx, y + h); ctx.lineTo(xx + h, y); ctx.stroke(); }
+      } else if (key === "waves") {
+        ctx.lineWidth = 4;
+        for (let yy = y + 45; yy < y + h; yy += 34) {
+          ctx.beginPath();
+          for (let xx = x; xx <= x + w; xx += 10) ctx.lineTo(xx, yy + Math.sin((xx + yy) / 18) * 8);
+          ctx.stroke();
+        }
+      } else if (key === "recycle") {
+        ctx.font = "24px " + getComputedStyle(document.body).fontFamily;
+        for (let yy = y + 48; yy < y + h; yy += 58) for (let xx = x + 38; xx < x + w; xx += 72) ctx.fillText("♻", xx, yy);
+      } else {
+        ctx.font = "24px " + getComputedStyle(document.body).fontFamily;
+        for (let yy = y + 48; yy < y + h; yy += 54) for (let xx = x + 38; xx < x + w; xx += 66) ctx.fillText("🌱", xx, yy);
+      }
+      ctx.restore();
+    }
+
+    function paintPatternPreview(el, key) {
+      const c = document.createElement("canvas");
+      c.width = 80; c.height = 72;
+      const ctx = c.getContext("2d");
+      ctx.fillStyle = "#f8fff9"; ctx.fillRect(0, 0, c.width, c.height);
+      drawPattern(ctx, 0, 0, c.width, c.height, key);
+      el.style.backgroundImage = `url(${c.toDataURL()})`;
+      el.style.backgroundSize = "cover";
+    }
+
+    function startDraw(e) {
+      isDrawing = true;
+      lastPoint = getCanvasPoint($("drawCanvas"), e);
+      if (state.penMode === "pen" && state.sticker) drawDot(lastPoint);
+    }
+
+    function moveDraw(e) {
+      if (!isDrawing) return;
+      const p = getCanvasPoint($("drawCanvas"), e);
+      const ctx = $("drawCanvas").getContext("2d");
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.lineWidth = state.penMode === "eraser" ? 18 : 5;
+      ctx.strokeStyle = state.penMode === "eraser" ? state.colour : "#24332d";
+      ctx.beginPath();
+      ctx.moveTo(lastPoint.x, lastPoint.y);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+      lastPoint = p;
+      updateAll();
+    }
+
+    function drawDot(p) {
+      const ctx = $("drawCanvas").getContext("2d");
+      ctx.fillStyle = "#24332d";
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function addSticker() {
+      const canvas = $("drawCanvas");
+      const ctx = canvas.getContext("2d");
+      ctx.font = "42px " + getComputedStyle(document.body).fontFamily;
+      ctx.textAlign = "center";
+      ctx.fillText(state.sticker, canvas.clientWidth / 2, canvas.clientHeight / 2);
+    }
+
+    function getCanvasPoint(canvas, e) {
+      const r = canvas.getBoundingClientRect();
+      return { x: e.clientX - r.left, y: e.clientY - r.top };
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function updateSummary() {
+      const fit = updateFit();
+      const score = calcScore(fit);
+      const matAdv = state.material.advantages.slice(0, 2).join(" and ").toLowerCase();
+      $("autoSummary").textContent = `I chose ${state.material.name.toLowerCase()} because it is ${matAdv}. I selected a ${state.shape.name.toLowerCase()} because it can help with protection, stackability and material efficiency. I made my package slightly larger than my snack to ensure a good fit while reducing wasted space. My design supports sustainability by using environmentally friendly materials.`;
+      $("scoreNumber").textContent = score;
+      $("scoreCircle").style.setProperty("--score-deg", (score / 100 * 360) + "deg");
+      let title = "Needs Improvement";
+      let msg = "Your design has started well. Try a stronger sustainable material, a stackable shape, or a closer fit to reduce waste.";
+      if (score >= 82) { title = "Excellent Sustainability"; msg = "Fantastic design thinking. Your choices reduce waste, use responsible materials and fit the snack carefully."; }
+      else if (score >= 60) { title = "Good Sustainability"; msg = "Nice work. Your package makes several sustainable choices and could be improved by reducing empty space or choosing an even better material."; }
+      $("scoreTitle").textContent = title;
+      $("scoreMessage").textContent = msg;
+      updateFinalFacts(score, title);
+    }
+
+    function calcScore(fit) {
+      const fitScore = fit.fits ? Math.max(5, Math.min(25, Math.round(fit.efficiency / 4))) : 0;
+      const wasteScore = fit.fits ? Math.max(0, Math.round((100 - fit.waste) / 5)) : 0;
+      return Math.min(100, state.material.score + state.shape.score + fitScore + wasteScore);
+    }
+
+    function updateFinalFacts(score, title) {
+      $("finalFacts").innerHTML = `
+        <div class="fact"><strong>Packaging image:</strong> ${$("packageName").value || "My Snack Pack"}</div>
+        <div class="fact"><strong>Material:</strong> ${state.material.name}</div>
+        <div class="fact"><strong>Shape:</strong> ${state.shape.name}</div>
+        <div class="fact"><strong>Dimensions:</strong> ${state.length} mm x ${state.width} mm x ${state.height} mm</div>
+        <div class="fact"><strong>Sustainability score:</strong> ${score}/100 - ${title}</div>
+        <div class="fact"><strong>My design is sustainable because:</strong><br>${$("sustainableBecause").value || "I am still writing my reflection."}</div>
+        <div class="fact"><strong>One thing I would improve:</strong><br>${$("improvement").value || "I am still thinking about an improvement."}</div>`;
+    }
+
+    function drawFinal() {
+      const canvas = $("finalCanvas");
+      const ctx = canvas.getContext("2d");
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "#f7fcff";
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = state.colour;
+      roundRect(ctx, 38, 34, w - 76, h - 68, 8);
+      ctx.fill();
+      ctx.strokeStyle = "#244535";
+      ctx.lineWidth = 5;
+      ctx.stroke();
+      drawPattern(ctx, 38, 34, w - 76, h - 68, state.pattern.key);
+      ctx.fillStyle = "#24332d";
+      ctx.textAlign = "center";
+      ctx.font = "900 26px " + getComputedStyle(document.body).fontFamily;
+      ctx.fillText($("packageName").value || "My Snack Pack", w / 2, 86);
+      ctx.font = "44px " + getComputedStyle(document.body).fontFamily;
+      ctx.fillText(state.sticker, w / 2, h / 2 + 26);
+      ctx.font = "800 18px " + getComputedStyle(document.body).fontFamily;
+      ctx.fillText(state.material.name + " • " + state.shape.name, w / 2, h - 52);
+    }
+
+    init();
+  </script>
+</body>
+</html>
